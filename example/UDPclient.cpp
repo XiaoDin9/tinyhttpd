@@ -12,7 +12,7 @@ int main()
 	//conn_addr 是要连接的服务器地址结构
 	struct sockaddr_in conn_addr;
 	conn_addr.sin_family = AF_INET;
-	conn_addr.sin_port = htons(8345);
+	conn_addr.sin_port = htons(8345);									
 	//conn_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	//将 inet_addr() 改用 inet_pton() 这个现代的方法，支持 IPV4 和 IPV6
 	if (inet_pton(AF_INET, "127.0.0.1", &conn_addr.sin_addr) == -1) {
@@ -28,12 +28,8 @@ int main()
 	char c = 1, buf[255];
 	int num = 0;
 	while (c < 100) {
-		sendto(cli_sock, &c, sizeof(c), 0,
-			   (struct sockaddr*)&conn_addr,
-			   sizeof(conn_addr) );
-		int n = recvfrom(cli_sock, buf, sizeof(buf), 0,
-						 (struct sockaddr*)&serv_addr,
-						 &serv_addr_len );
+		sendto(cli_sock, &c, sizeof(c), 0, (struct sockaddr*)&conn_addr, sizeof(conn_addr));
+		int n = recvfrom(cli_sock, buf, sizeof(buf), 0, (struct sockaddr*)&serv_addr, &serv_addr_len);
 						 
 		if (n > 0) {
 			num++;			
@@ -48,12 +44,12 @@ int main()
 			}
 			printf("recv data from %s : %d  %c\n", serv_ip, ntohs(serv_addr.sin_port), buf[0]);
 		}
+		
 		++c;
 	}
+	
 	c='\0';
-	sendto(cli_sock, &c, sizeof(c), 0,
-		   (struct sockaddr*)&conn_addr,
-		   sizeof(conn_addr) );
+	sendto(cli_sock, &c, sizeof(c), 0, (struct sockaddr*)&conn_addr, sizeof(conn_addr) );
 	close(cli_sock);
 	printf("\nnum : %d\n", num);
 	return 0;
